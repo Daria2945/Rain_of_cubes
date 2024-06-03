@@ -3,13 +3,13 @@ using UnityEngine.Pool;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private PrefabCube _cube;
+    [SerializeField] private Cube _cube;
     [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private float _repeatRate = 1f;
     [SerializeField] private int _poolCapacity = 10;
     [SerializeField] private int _poolMaxSize = 10;
 
-    private ObjectPool<PrefabCube> _pool;
+    private ObjectPool<Cube> _pool;
 
     private void Awake()
     {
@@ -23,7 +23,7 @@ public class Spawner : MonoBehaviour
 
     private void CreatePool()
     {
-        _pool = new ObjectPool<PrefabCube>(
+        _pool = new ObjectPool<Cube>(
             createFunc: () => Instantiate(_cube),
             actionOnGet: (cube) => ActionOnGet(cube),
             actionOnRelease: (cube) => cube.gameObject.SetActive(false),
@@ -34,7 +34,7 @@ public class Spawner : MonoBehaviour
             );
     }
 
-    private void ActionOnGet(PrefabCube cube)
+    private void ActionOnGet(Cube cube)
     {
         cube.transform.position = _spawnPoints[Random.Range(0, _spawnPoints.Length)].position;
         cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -47,7 +47,7 @@ public class Spawner : MonoBehaviour
         _pool.Get();
     }
 
-    private void ReturnObjectInPool(PrefabCube cube)
+    private void ReturnObjectInPool(Cube cube)
     {
         _pool.Release(cube);
     }

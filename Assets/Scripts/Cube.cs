@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Renderer))]
-public class PrefabCube : MonoBehaviour
+public class Cube : MonoBehaviour
 {
     private Renderer _materialColor;
     private Coroutine _coroutine;
@@ -13,9 +13,9 @@ public class PrefabCube : MonoBehaviour
     private bool _haveCollided;
     private bool _isTimerExpired;
 
-    private Action<PrefabCube> _destroyAction;
+    private Action<Cube> _destroyAction;
 
-    public void InitializeAction(Action<PrefabCube> destroyAction)
+    public void InitializeAction(Action<Cube> destroyAction)
     {
         _destroyAction = destroyAction;
     }
@@ -42,7 +42,7 @@ public class PrefabCube : MonoBehaviour
             _haveCollided = true;
 
             ChangeColor();
-            _coroutine = StartCoroutine(LifetimeTimer());
+            _coroutine = StartCoroutine(DetermineLifetime());
         }
     }
 
@@ -63,7 +63,7 @@ public class PrefabCube : MonoBehaviour
         _materialColor.material.color = Random.ColorHSV();
     }
 
-    private IEnumerator LifetimeTimer()
+    private IEnumerator DetermineLifetime()
     {
         float minLifetime = 2f;
         float maxLifetime = 5f;
